@@ -1,8 +1,11 @@
 package com.example.vlad.player;
 
+import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.vlad.player.models.Song;
@@ -15,6 +18,7 @@ import java.util.List;
 
 public class PlaylistActivity extends ListActivity {
     private TextView textPlaylistId;
+    private DialogFragment dlgSongInfo;
 
     private List<Song> songs = Arrays.asList(new Song(1, "Extreme ways", "Moby"),
         new Song(2, "Выхода нет", "Сплин"));
@@ -31,5 +35,14 @@ public class PlaylistActivity extends ListActivity {
 //        }
 
         setListAdapter(new SongListAdapter(this, songs));
+        dlgSongInfo = new SongInfoFragment();
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Bundle fragmentData = new Bundle();
+        fragmentData.putInt("songId", songs.get(position).Id);
+        dlgSongInfo.setArguments(fragmentData);
+        dlgSongInfo.show(getFragmentManager(), "dlgSongInfo");
     }
 }

@@ -40,7 +40,7 @@ public class SongListAdapter extends ArrayAdapter<Song> {
 
         if(row == null) {
 
-            row = inflater.inflate(R.layout.song_partial, parent, false);
+            row = inflater.inflate(R.layout.partial_song, parent, false);
             holder = new ViewHolder();
             holder.imageAlbumImage = (ImageView)row.findViewById(R.id.album_image);
             holder.textSongTitle = (TextView)row.findViewById(R.id.song_title);
