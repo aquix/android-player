@@ -20,8 +20,8 @@ public class PlaylistActivity extends ListActivity {
     private TextView textPlaylistId;
     private DialogFragment dlgSongInfo;
 
-    private List<Song> songs = Arrays.asList(new Song(1, "Extreme ways", "Moby"),
-        new Song(2, "Выхода нет", "Сплин"));
+    private List<Song> songs = Arrays.asList(new Song(1, "Extreme ways", "Moby", ""),
+        new Song(2, "Выхода нет", "Сплин", ""));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

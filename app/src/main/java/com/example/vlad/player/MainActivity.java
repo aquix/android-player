@@ -9,6 +9,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.vlad.player.db.DbContext;
 import com.example.vlad.player.models.Playlist;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     List<Playlist> playlists;
     ListView lvPlaylists;
 
+    DbContext dbContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activity = this;
@@ -27,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Replace with Db data
-        playlists = Arrays.asList(new Playlist(1, "For good night"),
-                new Playlist(2, "Wake up"), new Playlist(3, "Indi"));
+        dbContext = new DbContext(this);
+        playlists = dbContext.getPlaylists();
         lvPlaylists = (ListView)findViewById(R.id.playlists);
 
         ArrayAdapter<Playlist> adapter = new ArrayAdapter<>(this,

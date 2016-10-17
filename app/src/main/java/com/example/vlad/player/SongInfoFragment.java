@@ -41,7 +41,7 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
         btnNextSong.setOnClickListener(this);
         btnPrevSong.setOnClickListener(this);
 
-        song = new Song(1, "Title", "Author");
+        song = new Song(1, "Title", "Author", "");
         renderView();
         return view;
     }
