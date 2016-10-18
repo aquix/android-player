@@ -52,7 +52,7 @@ public class PlaylistActivity extends ListActivity implements OpenFileDialog.Ope
         this.openFileDialog = new OpenFileDialog(this);
         this.openFileDialog.setOpenDialogListener(this);
 
-        btn = (Button)findViewById(R.id.btnAddPlaylist);
+        btn = (Button)findViewById(R.id.btnAddSong);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
