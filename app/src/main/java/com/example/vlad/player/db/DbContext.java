@@ -19,7 +19,6 @@ public class DbContext implements IDbContext {
     public DbContext(Context context) {
         dbHelper = new DbOpenHelper(context);
         open();
-        seed();
     }
 
     public void open() throws SQLException {
@@ -75,6 +74,7 @@ public class DbContext implements IDbContext {
         String selectQuery = "SELECT " + D.SONGS_TABLE + "." + D.SONG_ID + " AS " + D.SONG_ID +
                 ", " + D.SONGS_TABLE + "." + D.SONG_TITLE + " AS " + D.SONG_TITLE +
                 ", " + D.SONGS_TABLE + "." + D.SONG_ARTIST + " AS " + D.SONG_ARTIST +
+                ", " + D.SONGS_TABLE + "." + D.SONG_PATH + " AS " + D.SONG_PATH +
                 " FROM " + D.SONGS_TABLE +
                 " JOIN " + D.PLAYLISTS_SONGS_TABLE + " ON " + D.SONGS_TABLE + "." + D.SONG_ID + "=" + D.PLAYLISTS_SONGS_TABLE + "." + D.PS_SONG_ID +
                 " WHERE " + D.PLAYLISTS_SONGS_TABLE + "." + D.PS_PLAYLIST_ID + "=" + playlistId;
@@ -97,16 +97,12 @@ public class DbContext implements IDbContext {
 
     @Override
     public void addSong(Song song, int playlistId) {
-
         ContentValues values = new ContentValues();
         values.put(D.SONG_TITLE, song.Title);
         values.put(D.SONG_ARTIST, song.Artist);
+        values.put(D.SONG_PATH, song.Path);
 
         long newIndex = db.insert(D.SONGS_TABLE, "", values);
-
-        db.execSQL("INSERT INTO " + D.SONGS_TABLE +
-                "(" + D.SONG_TITLE + ", " + D.SONG_ARTIST + ")" +
-                " VALUES ('" + song.Title + "', '" + song.Artist + "');");
 
         values = new ContentValues();
         values.put(D.PS_SONG_ID, newIndex);
@@ -116,7 +112,6 @@ public class DbContext implements IDbContext {
 
     @Override
     public void addPlaylist(Playlist playlist) {
-
         ContentValues values = new ContentValues();
         values.put(D.PLAYLIST_NAME, playlist.Name);
 
@@ -126,10 +121,5 @@ public class DbContext implements IDbContext {
     @Override
     public void deleteSongById() {
 
-    }
-
-    private void seed() {
-        addPlaylist(new Playlist(1, "Something"));
-        addSong(new Song(1, "dfs", "kdsfaj", "fjdks"), 1);
     }
 }

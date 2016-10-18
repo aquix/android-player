@@ -6,6 +6,10 @@ public class Playlist {
         Name = name;
     }
 
+    public Playlist(String name) {
+        Name = name;
+    }
+
     public int Id;
     public String Name;
 

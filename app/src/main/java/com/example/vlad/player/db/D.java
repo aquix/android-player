@@ -4,7 +4,7 @@ package com.example.vlad.player.db;
 public final class D {
     public static final String PLAYLISTS_TABLE = "playlists";
     public static final String SONGS_TABLE = "songs";
-    public static final String PLAYLISTS_SONGS_TABLE = "plylists_songs";
+    public static final String PLAYLISTS_SONGS_TABLE = "playlists_songs";
 
     public static final String PLAYLIST_ID = "id";
     public static final String PLAYLIST_NAME = "name";
