@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.example.vlad.player.models.Playlist;
 import com.example.vlad.player.models.Song;
@@ -128,8 +129,31 @@ public class DbContext implements IDbContext {
         db.delete(D.PLAYLISTS_TABLE, "id = " + id, null);
     }
 
+    public ArrayList<Song> getSongsByIds(ArrayList<Integer> ids) {
+        String idsString = TextUtils.join(", ", ids);
+
+        String selectQuery = "SELECT * FROM " + D.SONGS_TABLE + " WHERE id IN ( " + idsString + " );";
+        Cursor cursor = this.db.rawQuery(selectQuery, null);
+
+        ArrayList<Song> data = new ArrayList<>();
+
+        if (cursor.moveToFirst()) {
+            do {
+                data.add(new Song(
+                        cursor.getInt(cursor.getColumnIndex(D.SONG_ID)),
+                        cursor.getString(cursor.getColumnIndex(D.SONG_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(D.SONG_ARTIST)),
+                        cursor.getString(cursor.getColumnIndex(D.SONG_PATH))
+                ));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return data;
+    }
+
     private void seed() {
-        addPlaylist(new Playlist(1, "Something"));
-        addSong(new Song(1, "dfs", "kdsfaj", "fjdks"), 1);
+        this.addPlaylist(new Playlist(1, "Something"));
+        this.addSong(new Song(1, "dfs", "kdsfaj", "fjdks"), 1);
     }
 }

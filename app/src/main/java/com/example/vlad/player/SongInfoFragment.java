@@ -12,9 +12,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.vlad.player.db.DbContext;
+import com.example.vlad.player.db.IDbContext;
 import com.example.vlad.player.models.Song;
 import com.example.vlad.player.services.AlbumArtService;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 
 public class SongInfoFragment extends DialogFragment implements View.OnClickListener {
@@ -24,7 +28,23 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
     private TextView textTitle;
     private TextView textArtist;
 
-    private Song song;
+    private ArrayList<Integer> songIds;
+    private IDbContext sqliteContext;
+
+    private Song currentSong;
+    private int songIndex;
+    private ArrayList<Song> songs;
+
+    public static SongInfoFragment newInstance(ArrayList<Integer> songIds, int songIndex) {
+        
+        Bundle args = new Bundle();
+        args.putIntegerArrayList("songIds", songIds);
+        args.putInt("songIndex", songIndex);
+        
+        SongInfoFragment fragment = new SongInfoFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -39,7 +59,12 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
         this.textTitle = (TextView)view.findViewById(R.id.song_info_title);
         this.textArtist = (TextView)view.findViewById(R.id.song_info_artist);
 
-        this.song = new Song(1, "Title", "Author", "");
+        this.songIds = this.getArguments().getIntegerArrayList("songIds");
+        this.songIndex = this.getArguments().getInt("songIndex");
+
+        this.sqliteContext = new DbContext(this.getActivity().getApplicationContext());
+        this.songs = this.sqliteContext.getSongsByIds(this.songIds);
+        this.currentSong = this.songs.get(this.songIndex);
         this.renderView();
         return view;
     }
@@ -49,13 +74,19 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
         int id = v.getId();
         switch (id) {
         case R.id.btn_prev_song:
-            this.song.Id--;
-            this.song.Title = this.song.Title + "2";
+            this.songIndex -= 1;
+            if (this.songIndex < 0) {
+                this.songIndex += this.songIds.size();
+            }
+            this.currentSong = this.songs.get(this.songIndex);
             this.renderView();
             break;
         case R.id.btn_next_song:
-            this.song.Id++;
-            this.song.Title = this.song.Title + "1";
+            this.songIndex += 1;
+            if (this.songIndex >= this.songIds.size()) {
+                this.songIndex -= this.songIds.size();
+            }
+            this.currentSong = this.songs.get(this.songIndex);
             this.renderView();
             break;
         }
@@ -64,13 +95,13 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
     private void renderView() {
         Context context = this.getActivity().getApplicationContext();
 
-        String searchQuery = this.song.Artist + " " + this.song.Title;
+        String searchQuery = this.currentSong.Artist + " " + this.currentSong.Title;
         String url = AlbumArtService.getInstance().getAlbumArtUrl(searchQuery);
         Picasso.with(context)
                 .load(url)
                 .error(R.drawable.album_art_default)
                 .into(this.imageAlbumArt);
-        this.textTitle.setText(this.song.Title);
-        this.textArtist.setText(this.song.Artist);
+        this.textTitle.setText(this.currentSong.Title);
+        this.textArtist.setText(this.currentSong.Artist);
     }
 }
