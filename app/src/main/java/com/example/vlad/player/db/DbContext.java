@@ -119,7 +119,11 @@ public class DbContext implements IDbContext {
     }
 
     @Override
-    public void deleteSongById() {
+    public void deleteSong(int id) {
+        db.delete(D.SONGS_TABLE, "id = " + id, null);
+    }
 
+    public void deletePlaylist(int id) {
+        db.delete(D.PLAYLISTS_TABLE, "id = " + id, null);
     }
 }

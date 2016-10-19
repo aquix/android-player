@@ -16,5 +16,7 @@ public interface IDbContext {
 
     void addPlaylist(Playlist playlist);
 
-    void deleteSongById();
+    void deleteSong(int id);
+
+    void deletePlaylist(int id);
 }
