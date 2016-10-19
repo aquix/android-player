@@ -14,6 +14,7 @@ import com.example.vlad.player.db.IDbContext;
 import com.example.vlad.player.models.Song;
 import com.example.vlad.player.utils.OpenFileDialog;
 import com.example.vlad.player.utils.SongListAdapter;
+import com.example.vlad.player.utils.SongsFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,7 @@ public class PlaylistActivity extends ListActivity
 
     @Override
     public void onSelectedFile(String fileName) {
-        Song song = new Song("Anton", "Gena", fileName);
+        Song song = SongsFactory.createFromPath(fileName);
         this.dbContext.addSong(song, this.playlistId);
         this.updateSongList();
         this.updateListView();

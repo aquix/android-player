@@ -32,7 +32,7 @@ public class OpenFileDialog extends AlertDialog.Builder {
     private String accessDeniedMessage;
 
     public interface OpenDialogListener {
-        public void onSelectedFile(String fileName);
+        void onSelectedFile(String fileName);
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
@@ -44,17 +44,17 @@ public class OpenFileDialog extends AlertDialog.Builder {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView view = (TextView) super.getView(position, convertView, parent);
-            File file = getItem(position);
+            File file = this.getItem(position);
             if (view != null) {
                 view.setText(file.getName());
                 if (file.isDirectory()) {
-                    setDrawable(view, folderIcon);
+                    this.setDrawable(view, OpenFileDialog.this.folderIcon);
                 } else {
-                    setDrawable(view, fileIcon);
-                    if (selectedIndex == position)
-                        view.setBackgroundColor(getContext().getResources().getColor(android.R.color.holo_blue_dark));
+                    this.setDrawable(view, OpenFileDialog.this.fileIcon);
+                    if (OpenFileDialog.this.selectedIndex == position)
+                        view.setBackgroundColor(this.getContext().getResources().getColor(android.R.color.holo_blue_dark));
                     else
-                        view.setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+                        view.setBackgroundColor(this.getContext().getResources().getColor(android.R.color.transparent));
                 }
             }
             return view;
@@ -74,19 +74,19 @@ public class OpenFileDialog extends AlertDialog.Builder {
 
     public OpenFileDialog(Context context) {
         super(context);
-        title = createTitle(context);
-        changeTitle();
-        LinearLayout linearLayout = createMainLayout(context);
-        linearLayout.addView(createBackItem(context));
-        listView = createListView(context);
-        linearLayout.addView(listView);
-        setCustomTitle(title)
+        this.title = this.createTitle(context);
+        this.changeTitle();
+        LinearLayout linearLayout = this.createMainLayout(context);
+        linearLayout.addView(this.createBackItem(context));
+        this.listView = this.createListView(context);
+        linearLayout.addView(this.listView);
+        this.setCustomTitle(this.title)
                 .setView(linearLayout)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (selectedIndex > -1 && listener != null) {
-                            listener.onSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
+                        if (OpenFileDialog.this.selectedIndex > -1 && OpenFileDialog.this.listener != null) {
+                            OpenFileDialog.this.listener.onSelectedFile(OpenFileDialog.this.listView.getItemAtPosition(OpenFileDialog.this.selectedIndex).toString());
                         }
                     }
                 })
@@ -95,13 +95,13 @@ public class OpenFileDialog extends AlertDialog.Builder {
 
     @Override
     public AlertDialog show() {
-        files.addAll(getFiles(currentPath));
-        listView.setAdapter(new FileAdapter(getContext(), files));
+        this.files.addAll(this.getFiles(this.currentPath));
+        this.listView.setAdapter(new FileAdapter(this.getContext(), this.files));
         return super.show();
     }
 
     public OpenFileDialog setFilter(final String filter) {
-        filenameFilter = new FilenameFilter() {
+        this.filenameFilter = new FilenameFilter() {
 
             @Override
             public boolean accept(File file, String fileName) {
@@ -166,7 +166,7 @@ public class OpenFileDialog extends AlertDialog.Builder {
     private TextView createTextView(Context context, int style) {
         TextView textView = new TextView(context);
         textView.setTextAppearance(context, style);
-        int itemHeight = getItemHeight(context);
+        int itemHeight = this.getItemHeight(context);
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight));
         textView.setMinHeight(itemHeight);
         textView.setGravity(Gravity.CENTER_VERTICAL);
@@ -175,13 +175,13 @@ public class OpenFileDialog extends AlertDialog.Builder {
     }
 
     private TextView createTitle(Context context) {
-        TextView textView = createTextView(context, android.R.style.TextAppearance_DeviceDefault_DialogWindowTitle);
+        TextView textView = this.createTextView(context, android.R.style.TextAppearance_DeviceDefault_DialogWindowTitle);
         return textView;
     }
 
     private TextView createBackItem(Context context) {
-        TextView textView = createTextView(context, android.R.style.TextAppearance_DeviceDefault_Small);
-        Drawable drawable = getContext().getResources().getDrawable(android.R.drawable.ic_menu_directions);
+        TextView textView = this.createTextView(context, android.R.style.TextAppearance_DeviceDefault_Small);
+        Drawable drawable = this.getContext().getResources().getDrawable(android.R.drawable.ic_menu_directions);
         drawable.setBounds(0, 0, 60, 60);
         textView.setCompoundDrawables(drawable, null, null, null);
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -189,11 +189,11 @@ public class OpenFileDialog extends AlertDialog.Builder {
 
             @Override
             public void onClick(View view) {
-                File file = new File(currentPath);
+                File file = new File(OpenFileDialog.this.currentPath);
                 File parentDirectory = file.getParentFile();
                 if (parentDirectory != null) {
-                    currentPath = parentDirectory.getPath();
-                    RebuildFiles(((FileAdapter) listView.getAdapter()));
+                    OpenFileDialog.this.currentPath = parentDirectory.getPath();
+                    OpenFileDialog.this.RebuildFiles(((FileAdapter) OpenFileDialog.this.listView.getAdapter()));
                 }
             }
         });
@@ -207,26 +207,26 @@ public class OpenFileDialog extends AlertDialog.Builder {
     }
 
     private void changeTitle() {
-        String titleText = currentPath;
-        int screenWidth = getScreenSize(getContext()).x;
+        String titleText = this.currentPath;
+        int screenWidth = getScreenSize(this.getContext()).x;
         int maxWidth = (int) (screenWidth * 0.99);
-        if (getTextWidth(titleText, title.getPaint()) > maxWidth) {
-            while (getTextWidth("..." + titleText, title.getPaint()) > maxWidth) {
+        if (this.getTextWidth(titleText, this.title.getPaint()) > maxWidth) {
+            while (this.getTextWidth("..." + titleText, this.title.getPaint()) > maxWidth) {
                 int start = titleText.indexOf("/", 2);
                 if (start > 0)
                     titleText = titleText.substring(start);
                 else
                     titleText = titleText.substring(2);
             }
-            title.setText("..." + titleText);
+            this.title.setText("..." + titleText);
         } else {
-            title.setText(titleText);
+            this.title.setText(titleText);
         }
     }
 
     private List<File> getFiles(String directoryPath) {
         File directory = new File(directoryPath);
-        File[] list = directory.listFiles(filenameFilter);
+        File[] list = directory.listFiles(this.filenameFilter);
         if(list == null)
             list = new File[]{};
         List<File> fileList = Arrays.asList(list);
@@ -246,17 +246,17 @@ public class OpenFileDialog extends AlertDialog.Builder {
 
     private void RebuildFiles(ArrayAdapter<File> adapter) {
         try {
-            List<File> fileList = getFiles(currentPath);
-            files.clear();
-            selectedIndex = -1;
-            files.addAll(fileList);
+            List<File> fileList = this.getFiles(this.currentPath);
+            this.files.clear();
+            this.selectedIndex = -1;
+            this.files.addAll(fileList);
             adapter.notifyDataSetChanged();
-            changeTitle();
+            this.changeTitle();
         } catch (NullPointerException e) {
-            String message = getContext().getResources().getString(android.R.string.unknownName);
-            if (!accessDeniedMessage.equals(""))
-                message = accessDeniedMessage;
-            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            String message = this.getContext().getResources().getString(android.R.string.unknownName);
+            if (!this.accessDeniedMessage.equals(""))
+                message = this.accessDeniedMessage;
+            Toast.makeText(this.getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -268,14 +268,15 @@ public class OpenFileDialog extends AlertDialog.Builder {
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
                 final ArrayAdapter<File> adapter = (FileAdapter) adapterView.getAdapter();
                 File file = adapter.getItem(index);
+                assert file != null;
                 if (file.isDirectory()) {
-                    currentPath = file.getPath();
-                    RebuildFiles(adapter);
+                    OpenFileDialog.this.currentPath = file.getPath();
+                    OpenFileDialog.this.RebuildFiles(adapter);
                 } else {
-                    if (index != selectedIndex)
-                        selectedIndex = index;
+                    if (index != OpenFileDialog.this.selectedIndex)
+                        OpenFileDialog.this.selectedIndex = index;
                     else
-                        selectedIndex = -1;
+                        OpenFileDialog.this.selectedIndex = -1;
                     adapter.notifyDataSetChanged();
                 }
             }

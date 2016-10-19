@@ -3,6 +3,7 @@ package com.example.vlad.player;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
