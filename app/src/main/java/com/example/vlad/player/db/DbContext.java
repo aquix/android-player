@@ -19,6 +19,7 @@ public class DbContext implements IDbContext {
     public DbContext(Context context) {
         dbHelper = new DbOpenHelper(context);
         open();
+//        seed();
     }
 
     public void open() throws SQLException {
@@ -125,5 +126,10 @@ public class DbContext implements IDbContext {
 
     public void deletePlaylist(int id) {
         db.delete(D.PLAYLISTS_TABLE, "id = " + id, null);
+    }
+
+    private void seed() {
+        addPlaylist(new Playlist(1, "Something"));
+        addSong(new Song(1, "dfs", "kdsfaj", "fjdks"), 1);
     }
 }

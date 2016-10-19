@@ -23,47 +23,46 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AddPlaylistFragment.AddPlaylistDialogListener {
     private MainActivity activity;
-    private List<Playlist> playlists;
+
     private ListView lvPlaylists;
+
+    private List<Playlist> playlists;
     private ArrayAdapter<Playlist> adapter;
-    private AddPlaylistFragment dlgAddPlaylist;
 
-
-    IDbContext dbContext;
+    private IDbContext dbContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.activity = this;
-        setContentView(R.layout.activity_main);
+        this.setContentView(R.layout.activity_main);
 
         this.dbContext = new DbContext(this);
-        this.playlists = dbContext.getPlaylists();
-        this.lvPlaylists = (ListView)findViewById(R.id.playlists);
-        registerForContextMenu(lvPlaylists);
+
+        this.playlists = this.dbContext.getPlaylists();
 
         this.adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, playlists);
+                android.R.layout.simple_list_item_1, this.playlists);
 
-        this.lvPlaylists.setAdapter(adapter);
+        // Initialize ListView
+        this.lvPlaylists = (ListView)this.findViewById(R.id.playlists);
+        this.registerForContextMenu(this.lvPlaylists);
+        this.lvPlaylists.setAdapter(this.adapter);
         this.lvPlaylists.setOnItemClickListener(new OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
-                Intent intent = new Intent(activity, PlaylistActivity.class);
-                intent.putExtra("playlistId", playlists.get(position).Id);
-                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this.activity, PlaylistActivity.class);
+                intent.putExtra("playlistId", MainActivity.this.playlists.get(position).Id);
+                MainActivity.this.startActivity(intent);
             }
         });
-
-        this.dlgAddPlaylist = new AddPlaylistFragment();
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.playlist_context_menu, menu);
+        this.getMenuInflater().inflate(R.menu.playlist_context_menu, menu);
     }
 
     @Override
@@ -71,9 +70,9 @@ public class MainActivity extends AppCompatActivity implements AddPlaylistFragme
         int id = item.getItemId();
         if (id == R.id.delete_playlist_item) {
             int index = ((AdapterView.AdapterContextMenuInfo)item.getMenuInfo()).position;
-            int playlistId = playlists.get(index).Id;
-            dbContext.deletePlaylist(playlistId);
-            this.playlists = dbContext.getPlaylists();
+            int playlistId = this.playlists.get(index).Id;
+            this.dbContext.deletePlaylist(playlistId);
+            this.playlists = this.dbContext.getPlaylists();
             this.reloadList();
         }
 
@@ -82,21 +81,23 @@ public class MainActivity extends AppCompatActivity implements AddPlaylistFragme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.playlists_menu, menu);
+        this.getMenuInflater().inflate(R.menu.playlists_menu, menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.add_playlist) {
-            this.dlgAddPlaylist.show(getFragmentManager(), "dlgAddPlaylist");
+            AddPlaylistFragment dlgAddPlaylist = AddPlaylistFragment.newInstance();
+            dlgAddPlaylist.show(this.getFragmentManager(), "dlgAddPlaylist");
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onAddPlaylist(DialogFragment dialog) {
-        this.playlists = dbContext.getPlaylists();
+    public void onAddPlaylist(Playlist playlist) {
+        this.dbContext.addPlaylist(playlist);
+        this.playlists = this.dbContext.getPlaylists();
         this.reloadList();
     }
 

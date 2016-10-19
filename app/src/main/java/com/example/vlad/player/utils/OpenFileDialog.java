@@ -32,7 +32,7 @@ public class OpenFileDialog extends AlertDialog.Builder {
     private String accessDeniedMessage;
 
     public interface OpenDialogListener {
-        public void OnSelectedFile(String fileName);
+        public void onSelectedFile(String fileName);
     }
 
     private class FileAdapter extends ArrayAdapter<File> {
@@ -86,7 +86,7 @@ public class OpenFileDialog extends AlertDialog.Builder {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (selectedIndex > -1 && listener != null) {
-                            listener.OnSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
+                            listener.onSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
                         }
                     }
                 })

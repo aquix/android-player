@@ -4,4 +4,9 @@
     <string name="prev_song">Prev</string>
     <string name="add_playlist">Add playlist</string>
     <string name="delete_playlist">Delete playlist</string>
+    <string name="delete_song_text">Delete song?</string>
+    <string name="delete_song">Delete</string>
+    <string name="remove_from_disk">Remove from disk</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

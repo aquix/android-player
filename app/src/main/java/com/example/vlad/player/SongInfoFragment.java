@@ -31,18 +31,16 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_song_info, container, false);
 
+        this.imageAlbumArt = (ImageView)view.findViewById(R.id.album_full_image);
+        this.btnPrevSong = (Button)view.findViewById(R.id.btn_prev_song);
+        this.btnPrevSong.setOnClickListener(this);
+        this.btnNextSong = (Button)view.findViewById(R.id.btn_next_song);
+        this.btnNextSong.setOnClickListener(this);
+        this.textTitle = (TextView)view.findViewById(R.id.song_info_title);
+        this.textArtist = (TextView)view.findViewById(R.id.song_info_artist);
 
-        imageAlbumArt = (ImageView)view.findViewById(R.id.album_full_image);
-        btnPrevSong = (Button)view.findViewById(R.id.btn_prev_song);
-        btnNextSong = (Button)view.findViewById(R.id.btn_next_song);
-        textTitle = (TextView)view.findViewById(R.id.song_info_title);
-        textArtist = (TextView)view.findViewById(R.id.song_info_artist);
-
-        btnNextSong.setOnClickListener(this);
-        btnPrevSong.setOnClickListener(this);
-
-        song = new Song(1, "Title", "Author", "");
-        renderView();
+        this.song = new Song(1, "Title", "Author", "");
+        this.renderView();
         return view;
     }
 
@@ -51,28 +49,28 @@ public class SongInfoFragment extends DialogFragment implements View.OnClickList
         int id = v.getId();
         switch (id) {
         case R.id.btn_prev_song:
-            song.Id--;
-            song.Title = song.Title + "2";
-            renderView();
+            this.song.Id--;
+            this.song.Title = this.song.Title + "2";
+            this.renderView();
             break;
         case R.id.btn_next_song:
-            song.Id++;
-            song.Title = song.Title + "1";
-            renderView();
+            this.song.Id++;
+            this.song.Title = this.song.Title + "1";
+            this.renderView();
             break;
         }
     }
 
     private void renderView() {
-        Context context = getActivity().getApplicationContext();
+        Context context = this.getActivity().getApplicationContext();
 
-        String searchQuery = song.Artist + " " + song.Title;
+        String searchQuery = this.song.Artist + " " + this.song.Title;
         String url = AlbumArtService.getInstance().getAlbumArtUrl(searchQuery);
         Picasso.with(context)
                 .load(url)
                 .error(R.drawable.album_art_default)
-                .into(imageAlbumArt);
-        textTitle.setText(song.Title);
-        textArtist.setText(song.Artist);
+                .into(this.imageAlbumArt);
+        this.textTitle.setText(this.song.Title);
+        this.textArtist.setText(this.song.Artist);
     }
 }
