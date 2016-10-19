@@ -1,4 +1,4 @@
-package com.example.vlad.player.utils;
+package com.example.vlad.player.views.dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;

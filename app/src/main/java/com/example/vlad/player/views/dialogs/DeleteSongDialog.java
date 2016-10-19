@@ -1,22 +1,15 @@
-package com.example.vlad.player;
+package com.example.vlad.player.views.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 
-import com.example.vlad.player.db.DbContext;
-import com.example.vlad.player.db.IDbContext;
-
-import java.security.PrivateKey;
+import com.example.vlad.player.R;
 
 public class DeleteSongDialog extends DialogFragment implements View.OnClickListener {
     public interface RemoveSongDialogListener {
@@ -38,6 +31,10 @@ public class DeleteSongDialog extends DialogFragment implements View.OnClickList
         DeleteSongDialog fragment = new DeleteSongDialog();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setOnDeleteSongListener(RemoveSongDialogListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -76,17 +73,6 @@ public class DeleteSongDialog extends DialogFragment implements View.OnClickList
         case R.id.btnNo:
             this.dismiss();
             break;
-        }
-    }
-
-    @Override
-    public void onAttach(Activity context) {
-        super.onAttach(context);
-        try {
-            this.listener = (RemoveSongDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement RemoveSongDialogListener");
         }
     }
 }

@@ -21,17 +21,12 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "playlist.db";
     private static final int SCHEMA = 1;
 
-
-    private SQLiteDatabase db;
-
     public DbOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        this.db = db;
-
         db.execSQL("PRAGMA foreign_keys = ON");
 
         db.execSQL("CREATE TABLE " + D.PLAYLISTS_TABLE + " (" +
@@ -60,6 +55,6 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ D.PLAYLISTS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+ D.SONGS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+ D.PLAYLISTS_SONGS_TABLE);
-        onCreate(db);
+        this.onCreate(db);
     }
 }

@@ -1,9 +1,6 @@
-package com.example.vlad.player;
+package com.example.vlad.player.views.dialogs;
 
-import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.vlad.player.db.DbContext;
+import com.example.vlad.player.R;
 import com.example.vlad.player.models.Playlist;
 
-public class AddPlaylistFragment extends DialogFragment implements View.OnClickListener {
+public class AddPlaylistDialog extends DialogFragment implements View.OnClickListener {
     public interface AddPlaylistDialogListener {
         public void onAddPlaylist(Playlist playlist);
     }
@@ -23,10 +20,10 @@ public class AddPlaylistFragment extends DialogFragment implements View.OnClickL
     Button btnAddPlaylist;
     EditText txtNewPlaylistName;
 
-    public static AddPlaylistFragment newInstance() {
+    public static AddPlaylistDialog newInstance() {
         Bundle args = new Bundle();
 
-        AddPlaylistFragment fragment = new AddPlaylistFragment();
+        AddPlaylistDialog fragment = new AddPlaylistDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,6 +40,10 @@ public class AddPlaylistFragment extends DialogFragment implements View.OnClickL
         return view;
     }
 
+    public void setOnAddPlaylistListener(AddPlaylistDialogListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -53,16 +54,6 @@ public class AddPlaylistFragment extends DialogFragment implements View.OnClickL
             this.listener.onAddPlaylist(newPlaylist);
             this.dismiss();
             break;
-        }
-    }
-
-    public void onAttach(Activity context) {
-        super.onAttach(context);
-        try {
-            this.listener = (AddPlaylistDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement AddPlaylistDialogListener");
         }
     }
 }

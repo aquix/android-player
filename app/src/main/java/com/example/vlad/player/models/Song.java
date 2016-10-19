@@ -3,13 +3,13 @@ package com.example.vlad.player.models;
 public class Song {
     public Song(int id, String title, String artist, String path) {
         this(title, artist, path);
-        Id = id;
+        this.Id = id;
     }
 
     public Song(String title, String artist, String path) {
-        Title = title;
-        Artist = artist;
-        Path = path;
+        this.Title = title;
+        this.Artist = artist;
+        this.Path = path;
     }
 
     public int Id;

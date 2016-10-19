@@ -2,12 +2,12 @@ package com.example.vlad.player.models;
 
 public class Playlist {
     public Playlist(int id, String name) {
-        Id = id;
-        Name = name;
+        this.Id = id;
+        this.Name = name;
     }
 
     public Playlist(String name) {
-        Name = name;
+        this.Name = name;
     }
 
     public int Id;
@@ -15,6 +15,6 @@ public class Playlist {
 
     @Override
     public String toString() {
-        return Name;
+        return this.Name;
     }
 }

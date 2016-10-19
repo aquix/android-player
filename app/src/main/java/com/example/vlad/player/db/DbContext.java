@@ -18,24 +18,24 @@ public class DbContext implements IDbContext {
     private DbOpenHelper dbHelper;
 
     public DbContext(Context context) {
-        dbHelper = new DbOpenHelper(context);
-        open();
+        this.dbHelper = new DbOpenHelper(context);
+        this.open();
 //        seed();
     }
 
     public void open() throws SQLException {
-        db = dbHelper.getWritableDatabase();
+        this.db = this.dbHelper.getWritableDatabase();
     }
 
     public void close() {
-        dbHelper.close();
+        this.dbHelper.close();
     }
 
     @Override
     public List<Song> getSongs() {
 
         String selectQuery = "SELECT  * FROM " + D.SONGS_TABLE;
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = this.db.rawQuery(selectQuery, null);
         ArrayList<Song> data = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
@@ -56,7 +56,7 @@ public class DbContext implements IDbContext {
     public List<Playlist> getPlaylists() {
 
         String selectQuery = "SELECT  * FROM " + D.PLAYLISTS_TABLE;
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = this.db.rawQuery(selectQuery, null);
         ArrayList<Playlist> data = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
@@ -80,7 +80,7 @@ public class DbContext implements IDbContext {
                 " FROM " + D.SONGS_TABLE +
                 " JOIN " + D.PLAYLISTS_SONGS_TABLE + " ON " + D.SONGS_TABLE + "." + D.SONG_ID + "=" + D.PLAYLISTS_SONGS_TABLE + "." + D.PS_SONG_ID +
                 " WHERE " + D.PLAYLISTS_SONGS_TABLE + "." + D.PS_PLAYLIST_ID + "=" + playlistId;
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = this.db.rawQuery(selectQuery, null);
         ArrayList<Song> data = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
@@ -104,12 +104,12 @@ public class DbContext implements IDbContext {
         values.put(D.SONG_ARTIST, song.Artist);
         values.put(D.SONG_PATH, song.Path);
 
-        long newIndex = db.insert(D.SONGS_TABLE, "", values);
+        long newIndex = this.db.insert(D.SONGS_TABLE, "", values);
 
         values = new ContentValues();
         values.put(D.PS_SONG_ID, newIndex);
         values.put(D.PS_PLAYLIST_ID, playlistId);
-        db.insert(D.PLAYLISTS_SONGS_TABLE, "", values);
+        this.db.insert(D.PLAYLISTS_SONGS_TABLE, "", values);
     }
 
     @Override
@@ -117,16 +117,16 @@ public class DbContext implements IDbContext {
         ContentValues values = new ContentValues();
         values.put(D.PLAYLIST_NAME, playlist.Name);
 
-        db.insert(D.PLAYLISTS_TABLE, "", values);
+        this.db.insert(D.PLAYLISTS_TABLE, "", values);
     }
 
     @Override
     public void deleteSong(int id) {
-        db.delete(D.SONGS_TABLE, "id = " + id, null);
+        this.db.delete(D.SONGS_TABLE, "id = " + id, null);
     }
 
     public void deletePlaylist(int id) {
-        db.delete(D.PLAYLISTS_TABLE, "id = " + id, null);
+        this.db.delete(D.PLAYLISTS_TABLE, "id = " + id, null);
     }
 
     public ArrayList<Song> getSongsByIds(ArrayList<Integer> ids) {
